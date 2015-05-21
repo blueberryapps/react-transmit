@@ -92,8 +92,9 @@ module.exports = function (Component, options) {
 				this.props.onQuery.call(this, Promise.resolve({}));
 			}
 		},
-		setQueryParams: function (nextParams, optionalQueryNames, checkEquals) {
+		setQueryParams: function (nextParams, optionalQueryNames, options) {
 			var _this = this;
+			options = arguments[2] || {};
 
 			var promise = new Promise(function (resolve, reject) {
 				var props = _this.props || {};
@@ -103,7 +104,7 @@ module.exports = function (Component, options) {
 
 				assign(allNextParams, _this.currentParams, nextParams)
 				paramsEquals = shallowEqual(allNextParams, _this.currentParams)
-				if (checkEquals && paramsEquals && _this.hasQueryResults()) return
+				if (options.checkEquals && paramsEquals && _this.hasQueryResults()) return
 
 				assign(_this.currentParams, nextParams);
 				promise = Container.getAllQueries(_this.currentParams, optionalQueryNames);
