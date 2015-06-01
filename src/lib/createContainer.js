@@ -6,6 +6,7 @@
 var React  = require("./react");
 var assign = React.__spread;
 var shallowEqual = require('./shallowEqual');
+var Promise = require("bluebird");
 
 /**
  * @function createContainer

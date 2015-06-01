@@ -3,8 +3,9 @@
  */
 "use strict";
 
-var React  = require("./react");
-var assign = React.__spread;
+var Promise = require("bluebird");
+var React   = require("./react");
+var assign  = React.__spread;
 
 /**
  * @function renderToString
