@@ -5,6 +5,7 @@
 
 var React  = require("./react");
 var assign = React.__spread;
+var shallowEqual = require('./shallowEqual');
 
 /**
  * @function createContainer
@@ -97,11 +98,17 @@ module.exports = function (Component, options) {
 			var promise = new Promise(function (resolve, reject) {
 				var props = _this.props || {};
 				var promise;
+				var requestParams = {};
 
 				assign(_this.currentParams, nextParams);
+				assign(requestParams, _this.currentParams);
 				promise = Container.getAllQueries(_this.currentParams, optionalQueryNames);
 
 				promise.then(function (queryResults) {
+					var paramsMatch = shallowEqual(_this.currentParams, requestParams);
+					if (!paramsMatch && !optionalQueryNames) {
+						return;
+					}
 					try {
 						_this.setState(queryResults);
 					}
