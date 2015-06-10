@@ -27,7 +27,7 @@ module.exports = function (Component, options) {
 		statics: {
 			queryParams: options.queryParams || {},
 			queries:     options.queries || {},
-			getQuery:    function (queryName, queryParams) {
+			getQuery:    function (queryName, queryParams, props) {
 				if (!Container.queries[queryName]) {
 					throw new Error(Component.displayName + " has no '" + queryName +"' query")
 				}
@@ -35,9 +35,9 @@ module.exports = function (Component, options) {
 				queryParams = queryParams || {};
 				assign(queryParams, Container.queryParams, assign({}, queryParams));
 
-				return Container.queries[queryName](queryParams);
+				return Container.queries[queryName](queryParams, props);
 			},
-			getAllQueries: function (queryParams, optionalQueryNames) {
+			getAllQueries: function (queryParams, optionalQueryNames, props) {
 				var promises = [];
 				optionalQueryNames = optionalQueryNames || [];
 
@@ -51,7 +51,7 @@ module.exports = function (Component, options) {
 					}
 
 					var promise = Container.getQuery(
-						queryName, queryParams
+						queryName, queryParams, props
 					).then(function (queryResult) {
 						var queryResults = {};
 						queryResults[queryName] = queryResult;
@@ -103,7 +103,7 @@ module.exports = function (Component, options) {
 
 				assign(_this.currentParams, nextParams);
 				assign(requestParams, _this.currentParams);
-				promise = Container.getAllQueries(_this.currentParams, optionalQueryNames);
+				promise = Container.getAllQueries(_this.currentParams, optionalQueryNames, props);
 
 				promise.then(function (queryResults) {
 					var paramsMatch = shallowEqual(_this.currentParams, requestParams);
