@@ -111,7 +111,9 @@ module.exports = function (Component, options) {
 						return;
 					}
 					try {
-						_this.setState(queryResults);
+						// See discussion at https://github.com/facebook/react/issues/2787
+						if (_this.isMounted())
+  							_this.setState(queryResults);
 					}
 					catch (error) {
 						// Call to setState may fail if renderToString() was used.
